@@ -379,6 +379,13 @@ blockList.append(['lit_redstone_torch_wall', 'redstone_wall_torch'])
 blockList.append(['wooden_button', 'oak_button'])
 blockList.append(['wooden_button_inventory', 'oak_button_inventory'])
 blockList.append(['wooden_button_pressed', 'oak_button_pressed'])
+
+blockListNormal   = [[blockname1+'_n', blockname2+'_n'] for [blockname1, blockname2] in blockList]
+blockListSpecular = [[blockname1+'_s', blockname2+'_s'] for [blockname1, blockname2] in blockList]
+
+blockList += blockListNormal
+blockList += blockListSpecular
+
 #ITEMLIST： Tools and Armor
 toolList = [
     'wood',
