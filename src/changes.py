@@ -78,7 +78,7 @@ modelList = [
     ['quartz_inner_stairs', 'quartz_stairs_inner'],
 
     ['reeds', 'sugar_cane']
-    ]
+]
 
 stateList = [
     ['grass','grass_block'],
@@ -102,7 +102,7 @@ stateList = [
     ['wooden_button', 'oak_button'],
 
     ['reeds', 'sugar_cane']
-    ]
+]
 '''
 ---------------------------------------------------------------------------
                             change list
@@ -126,7 +126,7 @@ colorList = [
     'green',
     'red',
     'black'
-    ]
+]
 
 for _str in colorList:
     if _str != "light_gray":
@@ -158,7 +158,7 @@ stoneList = [
     'andesite',
     'granite',
     'diorite'
-    ]
+]
 
 for _str in stoneList:
     blockList.append(['stone_' + _str, _str])
@@ -210,7 +210,7 @@ cropList = [
     'nether_wart',
     'beetroots',
     'cocoa'
-    ]
+]
 
 for _str in cropList:
     for i in range(8):
@@ -230,7 +230,7 @@ woodenList = [
     'jungle',
     'acacia',
     'dark_oak'
-    ]
+]
 
 for _str in woodenList:
     blockList.append(['log_' + _str , _str + '_log'])
@@ -258,7 +258,7 @@ flowerList = [
     'blue_orchid',
     'dandelion',
     'oxeye_daisy'
-    ]
+]
 
 for _str in flowerList:
     blockList.append(['flower_' + _str , _str])
@@ -268,7 +268,7 @@ flowerTulipList = [
     'pink',
     'red',
     'white'
-    ]
+]
 
 for _str in flowerTulipList:
     blockList.append(['flower_tulip_' + _str , _str + '_tulip'])
@@ -280,7 +280,7 @@ doublePlantList = [
     ['syringa','lilac'],
     ['fern','large_fern'],
     ['grass','tall_grass']
-    ]
+]
 
 for _str in doublePlantList:
     blockList.append(['double_plant_' + _str[0] + '_bottom', _str[1] + '_bottom'])
@@ -408,7 +408,7 @@ blockList.append(['wooden_button_pressed', 'oak_button_pressed'])
 toolList = [
     'wood',
     'gold'
-    ]
+]
 
 for _str in toolList:
     itemList.append([_str + '_pickaxe' , _str + 'en_pickaxe'])
@@ -432,7 +432,7 @@ doorList = [
     'spruce',
     'dark_oak',
     'acacia'
-    ]
+]
 
 for _str in doorList:
     itemList.append(['door_' + _str, _str + '_door'])
@@ -449,7 +449,7 @@ rawList = [
     'fish_cod',
     'fish_pufferfish',
     'fish_clownfish'
-    ]
+]
 
 for _str in rawList:
     itemList.append([_str + '_raw' , _str])
@@ -462,7 +462,7 @@ cookedList = [
     'mutton',
     'fish_salmon',
     'fish_cod',
-    ]
+]
 
 for _str in cookedList:
     itemList.append([_str + '_cooked' , 'cooked_' + _str])
@@ -490,7 +490,7 @@ cdList = [
     'blocks',
     'mellohi',
     'stal'
-    ]
+]
 
 for _str in cdList:
     itemList.append(['record_' + _str, 'music_disc_' + _str])
@@ -510,7 +510,7 @@ cartList = [
     'command_block',
     'hopper',
     'furnace',
-    ]
+]
 
 for _str in cartList:
     itemList.append(['minecart_' + _str, _str + '_minecart'])
@@ -522,7 +522,7 @@ bookList = [
     'enchanted',
     'written',
     'writable'
-    ]
+]
 
 for _str in bookList:
     itemList.append(['book_' + _str, _str + '_book'])
@@ -534,7 +534,7 @@ bucketList = [
     'water',
     'lava',
     'milk'
-    ]
+]
 
 for _str in bucketList:
     itemList.append(['bucket_' + _str, _str + '_bucket'])
@@ -546,7 +546,7 @@ seedList = [
     'wheat',
     'pumpkin',
     'melon'
-    ]
+]
 
 for _str in seedList:
     itemList.append(['seeds_' + _str, _str + '_seeds'])
@@ -587,7 +587,7 @@ llamaList = [
     'creamy',
     'gray',
     'white'
-    ]
+]
 
 for _str in llamaList:
     itemList.append(['llama/llama_' + _str, 'llama/' + _str])
@@ -604,7 +604,7 @@ boatList = [
     'jungle',
     'oak',
     'spruce'
-    ]
+]
 
 for _str in boatList:
     entityList.append(['boat/boat_' + _str, 'boat/' + _str])
