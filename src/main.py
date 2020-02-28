@@ -1,4 +1,5 @@
 import os
+from os import path
 import json
 from PIL import Image
 import numpy as np
@@ -7,6 +8,8 @@ import shutil
 import math
 from onefile import *
 from changes import *
+
+import time
 
 def detectRes():
     if(os.path.exists(block_path)):
@@ -260,7 +263,7 @@ def changeModel():
         if(os.path.exists(MAIN_PATH + 'models/block/grass_normal.json')):
             with open(MAIN_PATH + 'models/block/grass_normal.json','r') as f:
                 grass_normal_json = json.loads("\n".join(modifyJson(f)))
-            if "textures" in grass_json:
+            if "textures" in grass_block_json:
                 grass_block_tex = grass_normal_json["textures"]
             else:
                 grass_block_tex = grass_block_json["textures"]
@@ -441,6 +444,67 @@ def changeModel():
 
     except IOError:
         print ("Error: fail to splite anvil state")
+
+def makeDirs():
+    os.mkdir(MAIN_PATH + "textures/entity/signs")
+'''
+---------------------------------------------------------------------------
+                           BOXCRAFT ONLY
+---------------------------------------------------------------------------
+
+'''
+
+def FixTextures():
+    # global PACK
+    NaturalTextureBlocks = [
+        "bedrock.json",
+        "dirt.json",
+        "grass_path.json",
+        "netherrack.json",
+        "red_sand.json",
+        "sand.json",
+        "stone.json"
+    ]
+
+    for n in NaturalTextureBlocks:
+        try:
+            with open(MAIN_PATH + 'blockstates/' + n, 'r') as f:
+                nblockdict = json.loads("\n".join(modifyJson(f)))
+            
+            variants = nblockdict["variants"]
+            newvar = variants["normal"]
+            del variants["normal"]
+            variants[""] = newvar
+            
+
+            with open(MAIN_PATH + 'blockstates/' + n, 'w') as dump_f:
+                json.dump({'variants': variants}, dump_f)
+            print("Converted blockstates/" + n)
+        except IOError:
+            print("Error: fail to splite anvil state")
+        except KeyError:
+            print("Error: Block has no variant of 'normal'")
+
+    # Fix Animated Blocks
+    os.remove(MAIN_PATH + "blockstates/furnace.json")
+    os.remove(MAIN_PATH + "models/block/item_frame.json")
+
+    AnimatedBlocks = [
+        ["furnace_front_on", 10],
+        ["sea_lantern", 5]
+    ]
+    for block in AnimatedBlocks:
+
+        try:
+            animation = {"interpolate": True, "frametime": block[1]}
+            with open(TEX_PATH + "block/" + block[0] +".png.mcmeta", 'w+') as dump_f:
+                json.dump({"animation": animation}, dump_f)
+            print("Converted " + block[0] + ".png.mcmeta")
+        except IOError:
+            print("Error: fail to splite anvil state")
+        except KeyError:
+            print("Error: Key error in block " + block)
+
 '''
 ---------------------------------------------------------------------------
                            resize change tex
@@ -627,9 +691,9 @@ def changeInfo():
             pack_info = json.loads("\n".join(modifyJson(f)))
 
             #print(pack_info)
-            pack_info['pack']['pack_format'] = 4
-            pack_info['pack']['description'] = pack_info['pack']['description'].replace(" fit for 1.13 by icrdr","")
-            pack_info['pack']['description'] += " fit for 1.13 by icrdr"
+            pack_info['pack']['pack_format'] = 5
+            pack_info['pack']['description'] = pack_info['pack']['description'].replace(" 1.15 Converted","")
+            pack_info['pack']['description'] += " 1.15 Converted"
             #print(pack_info)
 
         with open(PACK + '/pack.mcmeta','w') as f:
@@ -658,7 +722,7 @@ def zipPack():
     print ("CONVERTION DONE!")
     print ("zipping pack...")
 
-    azip = zipfile.ZipFile(PACK + '_for_1.13_by_icrdr.zip', 'w')
+    azip = zipfile.ZipFile(PACK + '_for_1.15.zip', 'w')
     for root, dirs, files in os.walk(PACK):
         for name in files:
             azip.write(os.path.join(root, name),os.path.join(root, name)[len(PACK)+1:])
@@ -666,15 +730,25 @@ def zipPack():
     azip.close()
     deleteTemp(PACK)
 
-def main(pack):
-    global PACK, MAIN_PATH, TEX_PATH, block_path, item_path, entity_path
+def main(pack, tex = False):
+    global PACK, MAIN_PATH, TEX_PATH, block_path, item_path, entity_path, TEXTURES
     PACK = pack
-    MAIN_PATH = PACK + '/assets/minecraft/'
-    TEX_PATH =  MAIN_PATH+ 'textures/'
-    block_path = TEX_PATH+ 'blocks/'
-    item_path = TEX_PATH+ 'items/'
-    entity_path = TEX_PATH+ 'entity/'
+    TEXTURES = tex
     unzipPack()
+
+    if not path.exists(PACK + "/pack.mcmeta"):
+        list_subfolders_with_paths = [
+            f.path for f in os.scandir(pack) if f.is_dir()]
+        PACK = list_subfolders_with_paths[0]
+
+    MAIN_PATH = PACK + '/assets/minecraft/'
+    TEX_PATH =  MAIN_PATH + 'textures/'
+    block_path = TEX_PATH + 'blocks/'
+    item_path = TEX_PATH + 'items/'
+    entity_path = TEX_PATH + 'entity/'
+    
+        
+    # print(PACK)
     with open(PACK + '/pack.mcmeta', "r", encoding="utf-8") as f:
         is113 = False
         for line in f:
@@ -688,17 +762,22 @@ def main(pack):
         print("fail to detect the pack's resolution")
         deleteTemp(PACK)
         return 0
-    return conversion(res_r)
+    return conversion(res_r, TEXTURES)
 
-def conversion(res_r):
+
+
+def conversion(res_r, tex = False):
     global RES_R
     if(res_r == 0):res_r = 1
     RES_R = int(math.pow(2, res_r)-1)
+    makeDirs()
     changeFileName()
     changeFolderName()
     changeModel()
     resizeTex()
     changeInfo()
+    if tex:
+        FixTextures()
     zipPack()
     print ("ALL DONE!")
     return True

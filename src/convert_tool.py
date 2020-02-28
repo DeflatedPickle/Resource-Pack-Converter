@@ -1,14 +1,15 @@
-from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
 import tkinter as tk
 from main import main, conversion
 import math
 import sys
-from onefile import *
 
 import os
 print (os.getcwd())
+
+global textures
+textures = False
 
 def center_window(win, width=300, height=200):
     # get screen width and height
@@ -30,11 +31,11 @@ def convertionStart():
     messagebox.showinfo(title='success', message='Conversion is Done!')
 
 def selectPack():
-    global pack
+    global pack, textures
     pack = filedialog.askopenfilename(initialdir = "./",title = "Select Pack",filetypes = (("resource pack","*.zip"),("all files","*.*")))
     if(pack):
         root.withdraw()
-        convert = main(pack[:-4])
+        convert = main(pack[:-4], textures)
         if(convert == -1):
             print ("this pack is already compatible with 1.13")
             root.deiconify()
@@ -55,27 +56,38 @@ def selectPack():
     else:
         print ('select pack to start conversion')
 
+def fixtextures():
+    global textures
+    textures = not textures
+
 def show_values(value=None):
-    slider_label['text'] = text='resolution: '+ str(int(16 * math.pow(2, res_r.get()-1))) + 'X'
+    slider_label['text'] = 'resolution: '+ str(int(16 * math.pow(2, res_r.get()-1))) + 'X'
     #print (res_r.get())
 
 root = tk.Tk()
 root.title("Resource Pack Converter")
 #root.geometry('500x300+500+200')
-root.iconbitmap(resource_path('favicon.ico'))
-root.resizable(width=False, height=False)
-center_window(root, 270, 120)
+# root.resizable(width=False, height=False)
+# center_window(root, 270, 120)
 btn_select = tk.Button(
     root,
     text='Select Pack',
     width=50,
-    height=50,
+    height=10,
     command=selectPack
     )
+btn_setNatural = tk.Checkbutton (
+    root,
+    text="Fix Boxcraft Textures",
+    height=5,
+    width=50,
+    command=fixtextures
+)
 btn_select.pack()
+btn_setNatural.pack()
+
 res_win = tk.Toplevel(root)
 res_win.title("Set Resolution")
-res_win.iconbitmap(resource_path('favicon.ico'))
 res_win.resizable(width=False, height=False)
 center_window(res_win, 270, 80)
 
@@ -101,9 +113,11 @@ btn_start = tk.Button(
     res_win,
     text='Confirm',
     width=60,
-    command=convertionStart
+    command=fixtextures
     )
 btn_start.pack()
 res_win.withdraw()
+
+
 
 root.mainloop()
