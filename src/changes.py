@@ -1,6 +1,15 @@
+newDirectories = [
+    'textures/entity/signs'
+]
+
 blockList = []
 itemList = []
-entityList = []
+entityList = [
+    ["sign", "signs/oak"],
+    ["snowman", "snow_golem"],
+    ['cow/mooshroom', 'cow/red_mooshroom'],
+    ['shulker/endergolem', 'shulker/shulker']
+]
 modelList = [
     ['cobblestone_wall_mossy_inventory','mossy_cobblestone_wall_inventory'],
     ['stonebrick_mossy','mossy_stone_bricks'],
@@ -69,7 +78,7 @@ modelList = [
     ['quartz_inner_stairs', 'quartz_stairs_inner'],
 
     ['reeds', 'sugar_cane']
-    ]
+]
 
 stateList = [
     ['grass','grass_block'],
@@ -93,7 +102,7 @@ stateList = [
     ['wooden_button', 'oak_button'],
 
     ['reeds', 'sugar_cane']
-    ]
+]
 '''
 ---------------------------------------------------------------------------
                             change list
@@ -117,24 +126,39 @@ colorList = [
     'green',
     'red',
     'black'
-    ]
+]
 
 for _str in colorList:
-    blockList.append(['wool_colored_' + _str, _str + '_wool'])
-    blockList.append(['glass_' + _str, _str + '_stained_glass'])
-    blockList.append(['glass_pane_top_' + _str, _str + '_stained_glass_pane_top'])
-    blockList.append(['hardened_clay_stained_' + _str, _str + '_terracotta'])
-    blockList.append(['concrete_powder_' + _str, _str + '_concrete_powder'])
-    blockList.append(['concrete_' + _str, _str + '_concrete'])
-    blockList.append(['glazed_terracotta_' + _str, _str + '_glazed_terracotta'])
-    blockList.append(['shulker_top_' + _str, _str + '_shulker_box_top'])
+    if _str != "light_gray":
+        blockList.append(['wool_colored_' + _str, _str + '_wool'])
+        blockList.append(['glass_' + _str, _str + '_stained_glass'])
+        blockList.append(['glass_pane_top_' + _str, _str + '_stained_glass_pane_top'])
+        blockList.append(['hardened_clay_stained_' + _str, _str + '_terracotta'])
+        blockList.append(['concrete_powder_' + _str, _str + '_concrete_powder'])
+        blockList.append(['concrete_' + _str, _str + '_concrete'])
+        blockList.append(['glazed_terracotta_' + _str, _str + '_glazed_terracotta'])
+        blockList.append(['shulker_top_' + _str, _str + '_shulker_box_top'])
+    else:
+        blockList.append(['wool_colored_silver', _str + '_wool'])
+        blockList.append(['glass_silver', _str + '_stained_glass'])
+        blockList.append(
+            ['glass_pane_top_silver', _str + '_stained_glass_pane_top'])
+        blockList.append(['hardened_clay_stained_silver', _str + '_terracotta'])
+        blockList.append(['concrete_powder_silver',
+                          _str + '_concrete_powder'])
+        blockList.append(['concrete_silver', _str + '_concrete'])
+        blockList.append(['glazed_terracotta_silver',
+                          _str + '_glazed_terracotta'])
+        blockList.append(['shulker_top_silver', _str +
+                          '_shulker_box_top'])
+
 
 #BLOCKLIST： Stones
 stoneList = [
     'andesite',
     'granite',
     'diorite'
-    ]
+]
 
 for _str in stoneList:
     blockList.append(['stone_' + _str, _str])
@@ -186,7 +210,7 @@ cropList = [
     'nether_wart',
     'beetroots',
     'cocoa'
-    ]
+]
 
 for _str in cropList:
     for i in range(8):
@@ -206,7 +230,7 @@ woodenList = [
     'jungle',
     'acacia',
     'dark_oak'
-    ]
+]
 
 for _str in woodenList:
     blockList.append(['log_' + _str , _str + '_log'])
@@ -216,6 +240,7 @@ for _str in woodenList:
     blockList.append(['leaves_' + _str, _str + '_leaves'])
     blockList.append(['door_' + _str + '_lower', _str + '_door_bottom'])
     blockList.append(['door_' + _str + '_upper', _str + '_door_top'])
+    modelList.append([ _str + '_bark', _str + '_wood'])
 
 blockList.append(['door_wood_lower', 'oak_door_bottom'])
 blockList.append(['door_wood_upper', 'oak_door_top'])
@@ -233,7 +258,7 @@ flowerList = [
     'blue_orchid',
     'dandelion',
     'oxeye_daisy'
-    ]
+]
 
 for _str in flowerList:
     blockList.append(['flower_' + _str , _str])
@@ -243,7 +268,7 @@ flowerTulipList = [
     'pink',
     'red',
     'white'
-    ]
+]
 
 for _str in flowerTulipList:
     blockList.append(['flower_tulip_' + _str , _str + '_tulip'])
@@ -255,7 +280,7 @@ doublePlantList = [
     ['syringa','lilac'],
     ['fern','large_fern'],
     ['grass','tall_grass']
-    ]
+]
 
 for _str in doublePlantList:
     blockList.append(['double_plant_' + _str[0] + '_bottom', _str[1] + '_bottom'])
@@ -383,7 +408,7 @@ blockList.append(['wooden_button_pressed', 'oak_button_pressed'])
 toolList = [
     'wood',
     'gold'
-    ]
+]
 
 for _str in toolList:
     itemList.append([_str + '_pickaxe' , _str + 'en_pickaxe'])
@@ -407,7 +432,7 @@ doorList = [
     'spruce',
     'dark_oak',
     'acacia'
-    ]
+]
 
 for _str in doorList:
     itemList.append(['door_' + _str, _str + '_door'])
@@ -424,7 +449,7 @@ rawList = [
     'fish_cod',
     'fish_pufferfish',
     'fish_clownfish'
-    ]
+]
 
 for _str in rawList:
     itemList.append([_str + '_raw' , _str])
@@ -437,7 +462,7 @@ cookedList = [
     'mutton',
     'fish_salmon',
     'fish_cod',
-    ]
+]
 
 for _str in cookedList:
     itemList.append([_str + '_cooked' , 'cooked_' + _str])
@@ -465,14 +490,18 @@ cdList = [
     'blocks',
     'mellohi',
     'stal'
-    ]
+]
 
 for _str in cdList:
     itemList.append(['record_' + _str, 'music_disc_' + _str])
 
 #ITEMLIST： Dyes
 for _str in colorList:
-    itemList.append(['dye_powder_' + _str, _str + '_dye'])
+    if _str != "silver":
+        itemList.append(['dye_powder_' + _str, _str + '_dye'])
+    else:
+        itemList.append(['dye_powder_' + _str, 'light_gray_dye'])
+        
 
 #ITEMLIST： Minecarts
 cartList = [
@@ -481,7 +510,7 @@ cartList = [
     'command_block',
     'hopper',
     'furnace',
-    ]
+]
 
 for _str in cartList:
     itemList.append(['minecart_' + _str, _str + '_minecart'])
@@ -493,7 +522,7 @@ bookList = [
     'enchanted',
     'written',
     'writable'
-    ]
+]
 
 for _str in bookList:
     itemList.append(['book_' + _str, _str + '_book'])
@@ -505,7 +534,7 @@ bucketList = [
     'water',
     'lava',
     'milk'
-    ]
+]
 
 for _str in bucketList:
     itemList.append(['bucket_' + _str, _str + '_bucket'])
@@ -517,7 +546,7 @@ seedList = [
     'wheat',
     'pumpkin',
     'melon'
-    ]
+]
 
 for _str in seedList:
     itemList.append(['seeds_' + _str, _str + '_seeds'])
@@ -558,7 +587,7 @@ llamaList = [
     'creamy',
     'gray',
     'white'
-    ]
+]
 
 for _str in llamaList:
     itemList.append(['llama/llama_' + _str, 'llama/' + _str])
@@ -568,17 +597,17 @@ for _str in colorList:
     itemList.append(['decor/decor_' + _str, 'decor/' + _str])
 
 #ENTITYLIST： Boat
-bootList = [
+boatList = [
     'acacia',
     'birch',
     'dark_oak',
     'jungle',
     'oak',
     'spruce'
-    ]
+]
 
-for _str in llamaList:
-    itemList.append(['boat/boat_' + _str, 'boat/' + _str])
+for _str in boatList:
+    entityList.append(['boat/boat_' + _str, 'boat/' + _str])
 
 #ENTITYLIST： End Crystal
 entityList.append(['endercrystal/endercrystal', 'endercrystal/end_crystal'])
