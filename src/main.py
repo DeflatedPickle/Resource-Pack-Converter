@@ -1,4 +1,5 @@
 import os
+import sys
 from os import path
 import json
 from PIL import Image
@@ -6,6 +7,9 @@ import numpy as np
 import zipfile
 import shutil
 import math
+
+from loguru import logger
+
 from onefile import *
 from changes import *
 
@@ -724,19 +728,35 @@ def zipPack():
     print ("CONVERTION DONE!")
     print ("zipping pack...")
 
-    azip = zipfile.ZipFile(PACK + '_for_1.15.zip', 'w')
+    if NEW_NAME is None:
+        pack_name = PACK
+    else:
+        pack_name = NEW_NAME
+
+    azip = zipfile.ZipFile(pack_name + NAME_SUFFIX, 'w')
     for root, dirs, files in os.walk(PACK):
         for name in files:
             azip.write(os.path.join(root, name),os.path.join(root, name)[len(PACK)+1:])
             print(os.path.join(root, name)[len(PACK)+1:])
     azip.close()
+    wait_for_yes("delete pack? [y/n]")
     deleteTemp(PACK)
 
-def main(pack, tex = False):
-    global PACK, MAIN_PATH, TEX_PATH, block_path, item_path, entity_path, TEXTURES
+
+@logger.catch
+def main(pack,
+         tex=False,
+         new_name=None,
+         name_suffix=None):
+    global PACK, MAIN_PATH, TEX_PATH, block_path, item_path, entity_path, TEXTURES, NEW_NAME, NAME_SUFFIX
     PACK = pack
     TEXTURES = tex
-    unzipPack()
+    NEW_NAME = new_name
+    NAME_SUFFIX = name_suffix
+
+    # Packs can also be folders
+    if zipfile.is_zipfile(pack + ".zip"):
+        unzipPack()
 
     if not path.exists(PACK + "/pack.mcmeta"):
         list_subfolders_with_paths = [
@@ -748,20 +768,24 @@ def main(pack, tex = False):
     block_path = TEX_PATH + 'blocks/'
     item_path = TEX_PATH + 'items/'
     entity_path = TEX_PATH + 'entity/'
-    
+
         
     # print(PACK)
     with open(PACK + '/pack.mcmeta', "r", encoding="utf-8") as f:
+        pack_mcmeta = json.load(f)
         is113 = False
-        for line in f:
-            print (line)
-            if '"pack_format": 4' in line:is113 = True
+        if pack_mcmeta["pack"]["pack_format"] >= 4:
+            is113 = True
+
     if(is113):
+        logger.success("This pack is already of 1.13 format")
+        wait_for_yes("delete pack? [y/n]")
         deleteTemp(PACK)
         return -1
     res_r = detectRes()
     if(not res_r):
         print("fail to detect the pack's resolution")
+        wait_for_yes("delete pack? [y/n]")
         deleteTemp(PACK)
         return 0
     return conversion(res_r, TEXTURES)
@@ -783,6 +807,16 @@ def conversion(res_r, tex = False):
     zipPack()
     print ("ALL DONE!")
     return True
+
+
+def wait_for_yes(prompt):
+    answer = input(f"{prompt} ").strip()
+    while answer not in ("y", "n"):
+        wait_for_yes(prompt)
+
+    if answer == "n":
+        sys.exit()
+
 
 if __name__ == '__main__':
     print ("input resource pack dir")
