@@ -10,7 +10,8 @@ def cli():
     parser = argparse.ArgumentParser(
         prog="phantom",
         description="a tool to convert Minecraft resource packs from 1.8-1.12 to 1.15",
-        epilog=""
+        epilog="",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
     # log_level = parser.add_mutually_exclusive_group()
@@ -22,7 +23,9 @@ def cli():
     parser.add_argument("-t", "--textures", action="store_true", help="toggles the texture fix")
 
     parser.add_argument("-n", "--name", help="the file name of the converted pack (original name used if not passed)")
-    parser.add_argument("-s", "--suffix", help="an extra string to add to the end of the converted pack name")
+    parser.add_argument("-s", "--suffix", nargs='?', help="an extra string to add to the end of the converted pack name")
+
+    # parser.add_argument("-d", "--destination", help="the directory the converted pack will be placed in")
 
     return parser.parse_args()
 
@@ -32,7 +35,7 @@ if __name__ == "__main__":
 
     main(
         pack=args.pack_zip,
-        tex=args.textures,
         new_name=args.name,
         name_suffix=args.suffix or "",
+        tex=args.textures
     )
