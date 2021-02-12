@@ -8,6 +8,7 @@ import zipfile
 import shutil
 import math
 import tempfile
+import pathlib
 
 from loguru import logger
 
@@ -687,17 +688,22 @@ def changeInfo(pack_path):
 '''
 
 def zipPack(pack,
+            destination,
+            old_name,
             new_name,
             name_suffix):
     print ("CONVERTION DONE!")
     print ("zipping pack...")
 
     if new_name is None:
-        pack_name = pack
+        pack_name = old_name
     else:
         pack_name = new_name
 
-    azip = zipfile.ZipFile(pack_name + name_suffix, 'w')
+    if name_suffix != "":
+        name_suffix = f"-{name_suffix}"
+
+    azip = zipfile.ZipFile(f"{destination}/{pack_name}{name_suffix}.zip", 'w')
     for root, dirs, files in os.walk(pack):
         for name in files:
             azip.write(os.path.join(root, name),os.path.join(root, name)[len(pack)+1:])
@@ -707,10 +713,10 @@ def zipPack(pack,
 
 @logger.catch
 def main(pack,
+         destination,
          new_name,
          name_suffix,
          tex=False):
-    PACK = pack
     is113 = False
 
     tmp_dir = tempfile.mkdtemp()
@@ -749,27 +755,31 @@ def main(pack,
 
     conversion(
         tmp_dir,
+        destination,
         MAIN_PATH,
         TEX_PATH,
         block_path,
         item_path,
         entity_path,
         res_r,
+        pathlib.Path(pack).stem,
         new_name,
         name_suffix,
-        tex,
+        tex
     )
     logger.success("Finished converting the pack")
     del tmp_dir
 
 
 def conversion(pack_path,
+               destination,
                main_path,
                texture_path,
                block_path,
                item_path,
                entity_path,
                res_r,
+               old_name,
                new_name,
                name_suffix,
                tex=False):
@@ -805,6 +815,8 @@ def conversion(pack_path,
         )
     zipPack(
         pack_path,
+        destination,
+        old_name,
         new_name,
         name_suffix
     )
