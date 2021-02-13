@@ -13,9 +13,18 @@ import pathlib
 from loguru import logger
 
 from onefile import *
-from changes import *
 
 import time
+
+import settings
+
+if settings.game_format == "1.13":
+    from changes.v1_13 import *
+elif settings.game_format == "1.15":
+    from changes.v1_15 import *
+else:
+    raise NotImplementedError()
+
 
 def detectRes(block_path,
               item_path):
@@ -820,9 +829,3 @@ def conversion(pack_path,
         new_name,
         name_suffix
     )
-
-
-if __name__ == '__main__':
-    print ("input resource pack dir")
-    pack = input()
-    main(pack)
