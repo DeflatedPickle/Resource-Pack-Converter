@@ -16,9 +16,13 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    name: Create Linux executable
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # The type of runner that the job will run on
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    
+    name: Create ${{ matrix.os }} executable
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
