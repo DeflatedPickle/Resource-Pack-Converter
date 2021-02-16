@@ -79,13 +79,42 @@ _make_ico: _gen_icons
 _make_icns: _gen_icons
 	#!/usr/bin/env bash
 	set -euo pipefail
+
+	# This package is also available on Linux but we'll never use this script on it
+	if [ {{ os() }} = "macos" ]; then
+		brew install libicns
+	fi
+
 	png2icns {{ dist }}/icon/{{ icon_name }}.icns $(ls {{ build }}/icon/*.png | awk '$0 !~ "/64"')
 
 # runs the pyinstaller build
-build label=(name + '-' + version) type='file' level='INFO' debug='' upx='true': # _requirements _make_ico _make_icns
+build label=(name + '-' + version) type='file' level='INFO' debug='all' upx='true': _requirements
 	#!/usr/bin/env bash
-	set -euxo pipefail
-	echo "Starting build for {{ os() }}"
+	set -euo pipefail
+	echo "Starting build for {{ os() }} ({{ arch() }})"
+
+	# Make the icons for the OS we're on
+	if [ {{ os() }} = "windows" ]; then
+		just _make_ico;
+	elif [ {{ os() }} = "macos" ]; then
+		just _make_icns;
+	fi
+
+	if [ {{ os() }} = "windows" ]; then
+		data="--add-data {{ dist }}/icon/{{ icon_name }}.ico;.";
+		strip="--strip";
+		icon="--icon {{ dist }}/icon/{{ icon_name }}.ico";
+	elif [ {{ os() }} = "macos" ]; then
+		data="--add-data {{ dist }}/icon/{{ icon_name }}.icns:.";
+		icon="--icon {{ dist }}/icon/{{ icon_name }}.icns";
+	else
+		data="";
+		strip="";
+		icon=""
+	fi
+
+	if [ {{ debug }} != "" ]; then debug="--debug {{ debug }}"; else debug=""; fi
+
 	pyinstaller \
 		`# general options` \
 		--distpath {{ dist }} \
@@ -97,16 +126,14 @@ build label=(name + '-' + version) type='file' level='INFO' debug='' upx='true':
 		--specpath {{ spec }} \
 		--name {{ label }} \
 		`# what to bundle` \
-		{{ if os() == "windows" { "--add-data {{ dist }}/icon/{{ icon_name }}.ico;." } else { '' } }} \
-		{{ if os() == "macos" { "--add-data {{ dist }}/icon/{{ icon_name }}.icns:." } else { '' } }} \
+		$data \
 		--add-data src/*.png{{ split }}. \
 		`# how to generate` \
-		{{ if debug != '' { "--debug {{ debug }}" } else { '' } }} \
-		{{ if os() != "windows" { '--strip' } else { '' } }} \
+		$debug \
+		$strip \
 		{{ if upx != 'true' { '--noupx' } else { '' } }} \
 		--console \
-		{{ if os() == "windows" { "--icon {{ dist }}/{{ icon_name }}.ico" } else { '' } }} \
-		{{ if os() == "macos" { "--icon {{ dist }}/{{ icon_name }}.icns" } else { '' } }} \
+		$icon \
 		`# script to run` \
 		./src/cli.py
 	echo 'Finished building'

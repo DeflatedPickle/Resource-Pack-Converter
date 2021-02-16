@@ -37,7 +37,7 @@ def cli():
     # log_level.add_argument("-q", "--quiet", action="store_true", help="change the logging verbosity")
 
     parser.add_argument("pack", help="the pack location")
-    # parser.add_argument("res", type=int, choices=resolutions, help="the resolution of the pack")
+    parser.add_argument("res", type=int, choices=resolutions, help="the resolution of the pack")
 
     parser.add_argument("-n", "--name", nargs='?',
                         help="the file name of the converted pack")
@@ -66,6 +66,7 @@ if __name__ == "__main__":
     main(
         pack=args.pack,
         destination=pathlib.Path(args.pack).parent if not args.destination else os.path.expandvars(args.destination),
+        resolution=args.res,
         new_name=args.name,
         name_suffix=args.suffix or "",
         tex=args.boxcraft

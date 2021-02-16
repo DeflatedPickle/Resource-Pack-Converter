@@ -723,6 +723,7 @@ def zipPack(pack,
 @logger.catch
 def main(pack,
          destination,
+         resolution,
          new_name,
          name_suffix,
          tex=False):
@@ -754,13 +755,16 @@ def main(pack,
         logger.success("This pack is already of 1.13 format")
         return -1
 
-    res_r = detectRes(
-        block_path,
-        item_path
-    )
-    if not res_r:
-        logger.warning("Failed to detect the pack's resolution")
-        return 0
+    if not resolution:
+        res_r = detectRes(
+            block_path,
+            item_path
+        )
+        if not res_r:
+            logger.warning("Failed to detect the pack's resolution")
+            return 0
+    else:
+        res_r = resolution
 
     conversion(
         tmp_dir,
@@ -777,7 +781,7 @@ def main(pack,
         tex
     )
     logger.success("Finished converting the pack")
-    del tmp_dir
+    tmp_dir.delete()
 
 
 def conversion(pack_path,
