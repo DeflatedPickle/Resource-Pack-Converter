@@ -9,6 +9,12 @@ alias b := build
 
 export PYTHONOPTIMIZE := "1"
 
+download := './downloads/icon'
+
+dist := './dist'
+build := './build'
+spec := './'
+
 name := 'phantom'
 version := '1.4.0'
 
@@ -16,12 +22,8 @@ icon_sizes := '16 32 64 128 256 512'
 icon_temp_name := 'Phantom_JE1.png'
 icon_url := 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a6/' + icon_temp_name + '/revision/latest'
 icon_name := 'favicon'
-
-download := './downloads/icon'
-
-dist := './dist'
-build := './build'
-spec := './'
+icon_destination := download + "/icon/" + icon_temp_name
+icon_final := dist + "/icon/"+ icon_name
 
 split := if os() == "windows" { ';' } else { ':' }
 
@@ -55,11 +57,22 @@ _make_temp_dir:
 
 # downloads the icon then runs _gen_icons
 _download_icon: _make_temp_dir
-	wget {{ icon_url }} -O "{{ download }}/icon/{{ icon_temp_name }}"
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	if ! command - v wget >> /dev/null; then
+		echo "Downloading icon with wget"
+		wget {{ icon_url }} -O {{ icon_destination }}
+	elif ! command - v curl >> /dev/null; then
+		echo "Downloading icon with curl"
+		curl {{ icon_url }} -o {{ icon_destination }}
+	else
+		echo "Couldn't find wget or curl"
+	fi
 
 # resizes a given image
 _resize_icon size:
-	convert "{{ download }}/icon/{{ icon_temp_name }}" \
+	convert {{ icon_destination }} \
 			-resize "{{ size }}x{{ size }}" \
 			-background none \
 			-gravity center \
@@ -101,15 +114,15 @@ build label=(name + '-' + version) type='file' level='INFO' debug='all' upx='tru
 	fi
 
 	if [ {{ os() }} = "windows" ]; then
-		data="--add-data {{ dist }}/icon/{{ icon_name }}.ico;.";
-		strip="--strip";
-		icon="--icon {{ dist }}/icon/{{ icon_name }}.ico";
+		data="--add-data {{ icon_final }}.ico;."
+		strip="--strip"
+		icon="--icon {{ icon_final }}.ico"
 	elif [ {{ os() }} = "macos" ]; then
-		data="--add-data {{ dist }}/icon/{{ icon_name }}.icns:.";
-		icon="--icon {{ dist }}/icon/{{ icon_name }}.icns";
+		data="--add-data {{ icon_final }}.icns:."
+		icon="--icon {{ icon_final }}.icns"
 	else
-		data="";
-		strip="";
+		data=""
+		strip=""
 		icon=""
 	fi
 
