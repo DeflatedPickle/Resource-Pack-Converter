@@ -61,6 +61,11 @@ _download_icon: _make_temp_dir
 
 # resizes a given image
 _resize_icon size:
+	# This is installed on Windows and Linux, but MacOS doesn't have it by default :^)
+	if [ {{ os() }} = "macos" ]; then
+		brew install imagemagick
+	fi
+
 	convert {{ icon_destination }} \
 			-resize "{{ size }}x{{ size }}" \
 			-background none \
@@ -76,7 +81,7 @@ _gen_icons: _download_icon
 _make_ico: _gen_icons
 	#!/usr/bin/env bash
 	set -euo pipefail
-	convert $(ls {{ build }}/icon/*.png) {{ dist }}/icon/{{ icon_name }}.ico
+	convert "$(ls {{ build }}/icon/*.png)" "{{ dist }}/icon/{{ icon_name }}.ico"
 
 _make_icns: _gen_icons
 	#!/usr/bin/env bash
