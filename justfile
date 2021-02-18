@@ -9,7 +9,7 @@ alias b := build
 
 export PYTHONOPTIMIZE := "1"
 
-download := './downloads/icon'
+download := './downloads'
 
 dist := './dist'
 build := './build'
@@ -27,9 +27,11 @@ icon_final := dist + "/icon/"+ icon_name
 
 split := if os() == "windows" { ';' } else { ':' }
 
+# shows the command list
 default:
 	@just --list --unsorted
 
+# installs required python libraries
 _requirements:
 	pip install -r requirements.txt
 
@@ -69,7 +71,7 @@ _resize_icon size="256":
 		brew install imagemagick
 	fi
 
-	convert {{ icon_destination }} \
+	convert "{{ icon_destination }}" \
 			-resize "{{ size }}x{{ size }}" \
 			-background none \
 			-gravity center \
@@ -116,6 +118,7 @@ build label=(name + '-' + version) type='file' level='INFO' debug='all' upx='tru
 		icon="--icon {{ icon_final }}.ico"
 	elif [ {{ os() }} = "macos" ]; then
 		data="--add-data {{ icon_final }}.icns:."
+		strip=""
 		icon="--icon {{ icon_final }}.icns"
 	else
 		data=""
