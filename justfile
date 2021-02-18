@@ -60,7 +60,10 @@ _download_icon: _make_temp_dir
 	curl {{ icon_url }} -o {{ icon_destination }}
 
 # resizes a given image
-_resize_icon size:
+_resize_icon size="256":
+	#!/usr/bin/env bash
+	set -euo pipefail
+
 	# This is installed on Windows and Linux, but MacOS doesn't have it by default :^)
 	if [ {{ os() }} = "macos" ]; then
 		brew install imagemagick
