@@ -7,7 +7,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*.*.*' # Push events to matching v*, i.e. v1.0.0, v20.15.10
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -56,6 +56,12 @@ jobs:
       - name: Build application
         run: "just build phantom"
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: phantom ${{ matrix.os }}
+          path: ./dist/
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -63,8 +69,3 @@ jobs:
           files: ./dist/phantom
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: phantom ${{ matrix.os }}
-#          path: ./dist/
