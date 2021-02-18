@@ -57,18 +57,7 @@ _make_temp_dir:
 
 # downloads the icon then runs _gen_icons
 _download_icon: _make_temp_dir
-	#!/usr/bin/env bash
-	set -euo pipefail
-
-	if ! command - v wget >> /dev/null; then
-		echo "Downloading icon with wget"
-		wget {{ icon_url }} -O {{ icon_destination }}
-	elif ! command - v curl >> /dev/null; then
-		echo "Downloading icon with curl"
-		curl {{ icon_url }} -o {{ icon_destination }}
-	else
-		echo "Couldn't find wget or curl"
-	fi
+	curl {{ icon_url }} -o {{ icon_destination }}
 
 # resizes a given image
 _resize_icon size:

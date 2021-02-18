@@ -49,6 +49,9 @@ jobs:
         with:
           # A valid semver specifier of the just version to install
           just-version: 0.8
+        env:
+          # this is not required but add it if you get any rate limiting issues
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build application
         run: "just build phantom"
