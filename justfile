@@ -71,12 +71,22 @@ _resize_icon size="256":
 		brew install imagemagick
 	fi
 
-	convert "{{ icon_destination }}" \
-			-resize "{{ size }}x{{ size }}" \
-			-background none \
-			-gravity center \
-			-extent "{{ size }}x{{ size }}" \
-			"{{ build }}/icon/{{ size }}.png"
+	# TODO: Cache these args somewhere
+	if [ {{ os() }} != "windows" ]; then
+		convert "{{ icon_destination }}" \
+					-resize "{{ size }}x{{ size }}" \
+					-background none \
+					-gravity center \
+					-extent "{{ size }}x{{ size }}" \
+					"{{ build }}/icon/{{ size }}.png"
+	else
+		magick convert "{{ icon_destination }}" \
+					-resize "{{ size }}x{{ size }}" \
+					-background none \
+					-gravity center \
+					-extent "{{ size }}x{{ size }}" \
+					"{{ build }}/icon/{{ size }}.png"
+	fi
 
 # generates scaled versions of the icon
 _gen_icons: _download_icon
