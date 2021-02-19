@@ -45,6 +45,8 @@ jobs:
       - name: Chocolatey Action
         uses: crazy-max/ghaction-chocolatey@v1.4.0
         if: matrix.os == 'windows-latest'
+        with:
+          args: -h
 
       - name: Install ImageMagick
         run: "choco install imagemagick.tool"
