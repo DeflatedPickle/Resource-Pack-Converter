@@ -66,7 +66,6 @@ _resize_icon size="256":
 	#!/usr/bin/env bash
 	set -euo pipefail
 
-	# This is installed on Windows and Linux, but MacOS doesn't have it by default :^)
 	if [ {{ os() }} = "macos" ]; then
 		brew install imagemagick
 	fi
@@ -96,7 +95,12 @@ _gen_icons: _download_icon
 _make_ico: _gen_icons
 	#!/usr/bin/env bash
 	set -euo pipefail
-	convert "$(ls {{ build }}/icon/*.png)" "{{ dist }}/icon/{{ icon_name }}.ico"
+
+	if [ {{ os() }} != "windows" ]; then
+		convert "$(ls {{ build }}/icon/*.png)" "{{ dist }}/icon/{{ icon_name }}.ico"
+	else
+		magick convert "$(ls {{ build }}/icon/*.png)" "{{ dist }}/icon/{{ icon_name }}.ico"
+	fi
 
 _make_icns: _gen_icons
 	#!/usr/bin/env bash
