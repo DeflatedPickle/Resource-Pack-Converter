@@ -18,7 +18,8 @@ spec := './'
 name := 'phantom'
 version := '1.4.0'
 
-icon_sizes := '16 32 64 128 256 512'
+icon_sizes_win := '8 10 14 16 24 32 48 256'
+icon_sizes_mac := '16 32 48 128 256 512'
 icon_temp_name := 'Phantom_JE1.png'
 icon_url := 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a6/' + icon_temp_name + '/revision/latest'
 icon_name := 'favicon'
@@ -89,7 +90,14 @@ _resize_icon size="256":
 
 # generates scaled versions of the icon
 _gen_icons: _download_icon
-	for size in {{ icon_sizes }}; do just _resize_icon $size; done
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	if [ {{ os() }} = "windows" ]; then
+		for size in {{ icon_sizes_win }}; do just _resize_icon $size; done
+	elif [ {{ os() }} = "macos" ]; then
+		for size in {{ icon_sizes_mac }}; do just _resize_icon $size; done
+	fi
 
 # makes a windows icon file out of the icon images
 _make_ico: _gen_icons
