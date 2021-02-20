@@ -162,7 +162,8 @@ build label=(name + '-' + version) type='file' level='INFO' debug='all' upx='tru
 		--name {{ label }} \
 		`# what to bundle` \
 		$data \
-		--add-data src/*.png{{ split }}. \
+		--add-data "src/map_icons.png{{ split }}." \
+		--add-data "src/particles.png{{ split }}." \
 		`# how to generate` \
 		$debug \
 		$strip \
