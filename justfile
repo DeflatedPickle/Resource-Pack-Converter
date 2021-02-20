@@ -18,7 +18,7 @@ spec := './'
 name := 'phantom'
 version := '1.4.0'
 
-icon_sizes_win := '8 10 14 16 24 32 48 256'
+icon_sizes_win := '16 32 48 256'
 icon_sizes_mac := '16 32 48 128 256 512'
 icon_temp_name := 'Phantom_JE1.png'
 icon_url := 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a6/' + icon_temp_name + '/revision/latest'
