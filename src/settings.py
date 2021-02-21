@@ -1,1 +1,2 @@
-game_format = None
+target_format = None
+colour_space = "RGBA"

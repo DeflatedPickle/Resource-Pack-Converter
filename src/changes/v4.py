@@ -1,5 +1,7 @@
 from .common import *
 
+pack_format = 4
+
 for _str in colorList:
     blockList.append(['wool_colored_' + _str, _str + '_wool'])
     blockList.append(['glass_' + _str, _str + '_stained_glass'])

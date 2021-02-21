@@ -1,5 +1,7 @@
 from .common import *
 
+pack_format = 5
+
 newDirectories = [
     'textures/entity/signs'
 ]

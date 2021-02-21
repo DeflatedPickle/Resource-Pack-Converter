@@ -122,7 +122,7 @@ _make_icns: _gen_icons
 	png2icns {{ dist }}/icon/{{ icon_name }}.icns $(ls {{ build }}/icon/*.png | awk '$0 !~ "/64"')
 
 # runs the pyinstaller build
-build label=(name + '-' + version) type='file' level='INFO' debug='all' upx='true': _requirements
+build label=(name + '-' + version) type='file' level='INFO' debug='' upx='true': _requirements
 	#!/usr/bin/env bash
 	set -euo pipefail
 	echo "Starting build for {{ os() }} ({{ arch() }})"

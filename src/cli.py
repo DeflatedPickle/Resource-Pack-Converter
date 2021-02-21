@@ -8,7 +8,7 @@ import textwrap
 import settings
 
 resolutions = [16, 32, 64, 128, 256, 512]
-formats = ["1.13", "1.15"]
+formats = [4, 5]
 
 
 class CLIFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
@@ -36,8 +36,10 @@ def cli():
     # log_level.add_argument("-v", "--verbose", action="store_true", help="change the logging verbosity")
     # log_level.add_argument("-q", "--quiet", action="store_true", help="change the logging verbosity")
 
-    parser.add_argument("pack", help="the pack location")
-    parser.add_argument("res", type=int, choices=resolutions, help="the resolution of the pack")
+    parser.add_argument("pack",
+                        help="the pack location")
+    parser.add_argument("res", type=int, choices=resolutions, nargs='?',
+                        help="the resolution of the pack")
 
     parser.add_argument("-n", "--name", nargs='?',
                         help="the file name of the converted pack")
@@ -50,6 +52,9 @@ def cli():
     parser.add_argument("-f", "--format", choices=formats, default=formats[-1],
                         help="the game version to convert to")
 
+    parser.add_argument("-e", "--description", nargs='?',
+                        help="a destination to use for the converted pack")
+
     parser.add_argument("--boxcraft", action="store_true",
                         help="toggles the BoxCraft texture fix")
 
@@ -59,7 +64,7 @@ def cli():
 if __name__ == "__main__":
     args = cli()
 
-    settings.game_format = args.format
+    settings.target_format = args.format
 
     from main import main
 
@@ -69,5 +74,6 @@ if __name__ == "__main__":
         resolution=args.res,
         new_name=args.name,
         name_suffix=args.suffix or "",
+        description=args.description,
         tex=args.boxcraft
     )
