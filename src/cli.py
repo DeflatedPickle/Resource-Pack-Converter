@@ -4,6 +4,7 @@ import argparse
 import os
 import pathlib
 import textwrap
+from timeit import timeit
 
 import settings
 
@@ -55,6 +56,9 @@ def cli():
     parser.add_argument("-e", "--description", nargs='?',
                         help="a destination to use for the converted pack")
 
+    parser.add_argument("--shaders", action="store_true",
+                        help="toggles the shader texture fix")
+
     parser.add_argument("--boxcraft", action="store_true",
                         help="toggles the BoxCraft texture fix")
 
@@ -71,9 +75,10 @@ if __name__ == "__main__":
     main(
         pack=args.pack,
         destination=pathlib.Path(args.pack).parent if not args.destination else os.path.expandvars(args.destination),
-        resolution=args.res,
+        resolution=resolutions.index(args.res) if args.res in resolutions else None,
         new_name=args.name,
         name_suffix=args.suffix or "",
         description=args.description,
+        shaders=args.shaders,
         tex=args.boxcraft
     )

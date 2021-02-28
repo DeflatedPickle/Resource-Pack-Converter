@@ -7,29 +7,31 @@ from src.util.json_util import modify_json
 
 
 # noinspection SpellCheckingInspection
-def blockstate_fix_normal_variants(main_path,
-                                   texture_path):
+def blockstate_fix_normal_variants(texture_path,
+                                   model_path,
+                                   state_path):
     """
     In 1.8, blockstates have a "normal" variant. This was changed to "" in newer packs
 
-    :param main_path:
     :param texture_path:
+    :param model_path:
+    :param state_path:
     :return:
     """
     logger.info("Replacing blockstate normal variants")
 
     natural_texture_blocks = [
-        "bedrock.json",
-        "dirt.json",
-        "grass_path.json",
-        "netherrack.json",
-        "red_sand.json",
-        "sand.json",
-        "stone.json"
+        "bedrock",
+        "dirt",
+        "grass_path",
+        "netherrack",
+        "red_sand",
+        "sand",
+        "stone"
     ]
 
     for n in natural_texture_blocks:
-        path = f'{main_path}/blockstates/{n}'
+        path = f'{state_path}/{n}.json'
 
         try:
             with open(path, 'r') as f:
@@ -42,14 +44,12 @@ def blockstate_fix_normal_variants(main_path,
 
             with open(path, 'w') as dump_f:
                 json.dump({'variants': variants}, dump_f)
-            print("Converted blockstates/" + n)
-        except IOError:
-            print("Error: fail to splite anvil state")
-        except KeyError:
-            print("Error: Block has no variant of 'normal'")
+            logger.debug(f"Converted {n}.json")
+        except (IOError, KeyError) as e:
+            logger.error(f"Failed because of {e}")
 
-    os.remove(f"{main_path}/blockstates/furnace.json")
-    os.remove(f"{main_path}/models/block/item_frame.json")
+    os.remove(f"{state_path}/furnace.json")
+    os.remove(f"{model_path}/block/item_frame.json")
 
     # TODO: Convert to a dictionary
     animated_blocks = [
@@ -59,11 +59,16 @@ def blockstate_fix_normal_variants(main_path,
 
     for block in animated_blocks:
         try:
-            animation = {"interpolate": True, "frametime": block[1]}
             with open(f"{texture_path}/block/{block[0]}.png.mcmeta", 'w+') as dump_f:
-                json.dump({"animation": animation}, dump_f)
-            print("Converted " + block[0] + ".png.mcmeta")
-        except IOError:
-            print("Error: fail to splite anvil state")
-        except KeyError:
-            print("Error: Key error in block " + block)
+                json.dump(
+                    {
+                        "animation": {
+                            "interpolate": True,
+                            "frametime": block[1]
+                        }
+                    },
+                    dump_f
+                )
+            logger.debug(f"Converted {block[0]}.png.mcmeta")
+        except (IOError, KeyError) as e:
+            logger.error(f"Failed because of {e}")

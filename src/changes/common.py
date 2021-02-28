@@ -1,5 +1,15 @@
 newDirectories = []
 
+# old -> new
+entity_directory_list = [
+    ["endercrystal", "end_crystal"],
+]
+
+texture_directory_list = [
+    ["blocks", "block"],
+    ["items", "item"],
+]
+
 blockList = []
 itemList = []
 entityList = []
@@ -372,9 +382,6 @@ blockList.append(['wooden_button_pressed', 'oak_button_pressed'])
 blockListNormal   = [[blockname1+'_n', blockname2+'_n'] for [blockname1, blockname2] in blockList]
 blockListSpecular = [[blockname1+'_s', blockname2+'_s'] for [blockname1, blockname2] in blockList]
 
-blockList += blockListNormal
-blockList += blockListSpecular
-
 #ITEMLIST： Tools and Armor
 toolList = [
     'wood',
@@ -540,10 +547,10 @@ entityList.append(['shulker/shulker_purple', 'shulker/shulker'])
 entityList.append(['bed/silver', 'bed/light_gray'])
 
 #ENTITYLIST： Illager
-entityList.append(['illager/fangs', 'illager/evoker_fangs.png'])
+entityList.append(['illager/fangs', 'illager/evoker_fangs'])
 
 #ENTITYLIST： Wither
-entityList.append(['wither/wither_invul.png', 'wither/wither_invulnerable'])
+entityList.append(['wither/wither_invul', 'wither/wither_invulnerable'])
 
 #ENTITYLIST： Llama
 llamaList = [
@@ -576,3 +583,9 @@ for _str in boatList:
 #ENTITYLIST： End Crystal
 entityList.append(['endercrystal/endercrystal', 'endercrystal/end_crystal'])
 entityList.append(['endercrystal/endercrystal_beam', 'endercrystal/end_crystal_beam'])
+
+torch_list = [
+    "",
+    "redstone_",
+    "unlit_redstone_"
+]

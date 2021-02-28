@@ -107,4 +107,4 @@ def reposition_horse_texture(RES_R,
         n_h_img = Image.fromarray(n_h_arr)
         n_h_img.save(path, 'PNG')
     except Exception as e:
-        logger.warning(f"Failed to convert {file} because {e}")
+        logger.error(f"Failed to convert {file} because {e}")

@@ -24,11 +24,11 @@ def unzip_pack(
         logger.error(e)
 
 
-def zipup_pack(pack,
-               destination,
-               old_name,
-               new_name,
-               name_suffix):
+def zip_pack(pack,
+             destination,
+             old_name,
+             new_name,
+             name_suffix):
     """
     Zips a pack up, optionally adding a suffix to the name
 
@@ -54,6 +54,6 @@ def zipup_pack(pack,
     for root, dirs, files in os.walk(pack):
         for name in files:
             azip.write(os.path.join(root, name), os.path.join(root, name)[len(pack) + 1:])
-            print(os.path.join(root, name)[len(pack) + 1:])
+            # print(os.path.join(root, name)[len(pack) + 1:])
 
     azip.close()

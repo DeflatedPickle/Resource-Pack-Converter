@@ -16,7 +16,7 @@ def change_info(pack_path,
     :param description:
     :return:
     """
-    logger.info("Changing pack format")
+    logger.info("Changing pack format...")
 
     # Read the current data in
     # Then replace the format and description
@@ -26,6 +26,7 @@ def change_info(pack_path,
         pack_info['pack']['pack_format'] = pack_format
 
         if description != "":
+            logger.info("Changing pack description...")
             pack_info['pack']['description'] = description
 
     # Write the new data

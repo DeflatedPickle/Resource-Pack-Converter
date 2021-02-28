@@ -14,12 +14,12 @@ def resize_textures(
 ):
     logger.info("Resizing textures...")
 
-    _resize_particles(RES_R, texture_path)
-    _resize_map_icons(RES_R, texture_path)
-    _resize_horse(RES_R, texture_path)
+    resize_particles(RES_R, texture_path)
+    resize_map_icons(RES_R, texture_path)
+    resize_horse(RES_R, texture_path)
 
 
-def _resize_particles(
+def resize_particles(
         RES_R,
         texture_path
 ):
@@ -46,10 +46,10 @@ def _resize_particles(
             n_p_img = Image.fromarray(n_p_arr)
             n_p_img.save(path, 'PNG')
         except (FileNotFoundError, ValueError, TypeError, UnidentifiedImageError) as e:
-            logger.warning(f"Failed to convert {file} because {e}")
+            logger.error(f"Failed to convert {file} because {e}")
 
 
-def _resize_map_icons(
+def resize_map_icons(
         RES_R,
         texture_path
 ):
@@ -78,10 +78,10 @@ def _resize_map_icons(
             n_m_img = Image.fromarray(n_m_arr)
             n_m_img.save(path, 'PNG')
         except (FileNotFoundError, ValueError, TypeError, UnidentifiedImageError) as e:
-            logger.warning(f"Failed to convert {file} because {e}")
+            logger.error(f"Failed to convert {file} because {e}")
 
 
-def _resize_horse(
+def resize_horse(
         RES_R,
         texture_path
 ):

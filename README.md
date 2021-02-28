@@ -30,3 +30,13 @@ optional arguments:
 ```
 phantom oldpack.zip -s converted
 ```
+
+## License
+```
+MIT License
+
+Copyright (c) 2018 icrdr
+Copyright (c) 2019 MamiyaOtaru
+Copyright (c) 2020 trevorwarnerOIT
+Copyright (c) 2021 DeflatedPickle
+```
